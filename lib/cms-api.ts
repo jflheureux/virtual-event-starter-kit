@@ -20,6 +20,7 @@ import * as datoCmsApi from './cms-providers/dato';
 import * as contentfulApi from './cms-providers/contentful';
 import * as prismicApi from './cms-providers/prismic';
 import * as storyblokApi from './cms-providers/storyblok';
+import * as sitecoreContentHubApi from './cms-providers/sitecore-content-hub';
 
 let cmsApi: {
   getAllSpeakers: () => Promise<Speaker[]>;
@@ -28,7 +29,9 @@ let cmsApi: {
   getAllJobs: () => Promise<Job[]>;
 };
 
-if (process.env.DATOCMS_READ_ONLY_API_TOKEN) {
+if (process.env.SITECORE_CONTENT_HUB_ENDPOINT && process.env.SITECORE_CONTENT_HUB_READ_ONLY_API_KEY) {
+  cmsApi = sitecoreContentHubApi;
+} else if (process.env.DATOCMS_READ_ONLY_API_TOKEN) {
   cmsApi = datoCmsApi;
 } else if (process.env.CONTENTFUL_ACCESS_TOKEN && process.env.CONTENTFUL_SPACE_ID) {
   cmsApi = contentfulApi;
